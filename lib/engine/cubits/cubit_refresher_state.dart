@@ -1,0 +1,1 @@
+enum RefresherSatus {initial, loading, success, failed}
