@@ -1,5 +1,4 @@
-import 'package:jasamarga_nde_flutter/models/place.dart';
-import 'package:jasamarga_nde_flutter/models/user.dart';
+import 'package:jasamarga_nde_flutter/models/model_factory.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'sm_result.g.dart';
@@ -78,15 +77,18 @@ class _Converter<T> implements JsonConverter<T, Object> {
 
   @override
   T fromJson(Object json) {
-    if (json is Map<String, dynamic> &&
-        json.containsKey('place_category_id') &&
-        json.containsKey('place_documents_id')) {
-      return Place.fromJson(json) as T;
-    } else if (json is Map<String, dynamic> &&
-        json.containsKey('username') &&
-        json.containsKey('email')) {
-      return User.fromJson(json) as T;
+    if (json is Map<String, dynamic>) {
+      return ModelFactory.fromJson(T, json) as T;
     }
+    // if (json is Map<String, dynamic> &&
+    //     json.containsKey('place_category_id') &&
+    //     json.containsKey('place_documents_id')) {
+    //   return Place.fromJson(json) as T;
+    // } else if (json is Map<String, dynamic> &&
+    //     json.containsKey('username') &&
+    //     json.containsKey('email')) {
+    //   return User.fromJson(json) as T;
+    // }
     // This will only work if `json` is a native JSON type:
     //   num, String, bool, null, etc
     // *and* is assignable to `T`.

@@ -2,11 +2,12 @@ import 'package:hive/hive.dart';
 import 'package:jasamarga_nde_flutter/hive_helper/fields/user_fields.dart';
 import 'package:jasamarga_nde_flutter/hive_helper/hive_adapters.dart';
 import 'package:jasamarga_nde_flutter/hive_helper/hive_types.dart';
+import 'package:jasamarga_nde_flutter/models/model_factory.dart';
 
 part 'user.g.dart';
 
 @HiveType(typeId: HiveTypes.user, adapterName: HiveAdapters.user)
-class User extends HiveObject {
+class User extends HiveObject implements ModelFactory {
   User({
     this.id,
     this.email,

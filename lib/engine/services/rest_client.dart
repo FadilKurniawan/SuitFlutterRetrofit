@@ -31,17 +31,15 @@ abstract class RestClient {
       @Field("email") String email, @Field("password") String password);
 
   @GET("places")
-  @FormUrlEncoded()
   Future<APIListResult<Place>> getPlacesDefault(
-      @Field("page") int page, @Field("perPage") int perPage);
+      @Query("page") int page, @Query("perPage") int perPage);
 
   @GET("places")
   Future<WrappedListResponse<Place>> getPlaces(
       @Field("page") int page, @Field("perPage") int perPage);
 
   @GET("places/{id}")
-  @FormUrlEncoded()
-  Future<APIDetailResult<Place>> getDetailPlaces(@Path("page") int id);
+  Future<APIDetailResult<Place>> getDetailPlaces(@Path("id") int id);
 
   @POST("user/profile")
   @FormUrlEncoded()

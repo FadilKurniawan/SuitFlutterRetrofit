@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:jasamarga_nde_flutter/engine/services/api_service.dart';
 import 'package:jasamarga_nde_flutter/engine/services/rest_client.dart';
 import 'package:jasamarga_nde_flutter/engine/services/sm_result.dart';
 import 'package:jasamarga_nde_flutter/engine/utilities/secure_storage_manager.dart';

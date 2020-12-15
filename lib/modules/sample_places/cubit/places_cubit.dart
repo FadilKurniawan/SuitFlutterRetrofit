@@ -7,6 +7,7 @@ import 'package:jasamarga_nde_flutter/engine/cubits/cubit_refresher_state.dart';
 import 'package:jasamarga_nde_flutter/engine/services/rest_client.dart';
 import 'package:jasamarga_nde_flutter/hive_helper/hive_boxes.dart';
 import 'package:jasamarga_nde_flutter/models/place.dart';
+import 'package:jasamarga_nde_flutter/engine/services/sm_result_ext.dart';
 
 part 'places_state.dart';
 
@@ -43,45 +44,28 @@ class PlacesCubit extends BasePaginationCubit<PlacesState> {
   @override
   void refreshList({int page = 1}) async {
     emit(state.copyWith(status: RefresherSatus.loading));
-    await RestClient(Dio()).getPlacesDefault(page, state.perPage).then((value) {
-      print(
-          "Got : code ${value.code} -> ${value.message} -> data: ${value.data}");
-      if (value.code == 200) {
-        try {
-          List<Place> data = (state.data != null) ? state.data : List();
-          final _box = Hive.box<Place>(HiveBoxes.places);
-          if (page == 1) {
-            for (var item in value.data) {
-              _box.put(item.id, item);
-            }
-            data.clear();
-          }
-          data.addAll(value.data);
-          emit(state.copyWith(
-              data: data,
-              hasNext: value.data.isNotEmpty,
-              page: page,
-              status: RefresherSatus.success));
-        } catch (error) {
-          final errorString = error.toString();
-          print("ERROR : $errorString");
-          emit(state.copyWith(
-              status: RefresherSatus.failed, error: errorString));
+    await RestClient(Dio())
+        .getPlacesDefault(page, state.perPage)
+        .validateResponse()
+        .then((response) {
+      final data = state.data ?? [];
+      final _box = Hive.box<Place>(HiveBoxes.places);
+      if (page == 1) {
+        for (var item in response.data) {
+          _box.put(item.id, item);
         }
-      } else {}
-    }).catchError((onError) {
-      // non-200 error goes here.
-      switch (onError.runtimeType) {
-        case DioError:
-          // Here's the sample to get the failed response error code and message
-          final res = (onError as DioError).response;
-          print("Got error : ${res.statusCode} -> ${res.statusMessage}");
-          emit(state.copyWith(
-              status: RefresherSatus.failed, error: res.statusMessage));
-          break;
-        default:
+        data.clear();
       }
+      data.addAll(response.data);
+      emit(state.copyWith(
+          data: data,
+          hasNext: response.data.isNotEmpty,
+          page: page,
+          status: RefresherSatus.success));
+    }).handleError((error) {
+      emit(state.copyWith(status: RefresherSatus.failed, error: error));
     });
+
     // try {
     //   APIListResult<Place> result = await APIService.getPlaces(
     //     page: page,

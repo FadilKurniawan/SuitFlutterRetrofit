@@ -2,12 +2,13 @@ import 'package:hive/hive.dart';
 import 'package:jasamarga_nde_flutter/hive_helper/hive_types.dart';
 import 'package:jasamarga_nde_flutter/hive_helper/hive_adapters.dart';
 import 'package:jasamarga_nde_flutter/hive_helper/fields/place_fields.dart';
+import 'package:jasamarga_nde_flutter/models/model_factory.dart';
 import 'package:jasamarga_nde_flutter/models/place_category.dart';
 
 part 'place.g.dart';
 
 @HiveType(typeId: HiveTypes.place, adapterName: HiveAdapters.place)
-class Place extends HiveObject {
+class Place extends HiveObject implements ModelFactory {
   Place({
     this.id,
     this.name,

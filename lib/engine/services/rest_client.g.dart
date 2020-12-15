@@ -42,16 +42,17 @@ class _RestClient implements RestClient {
     ArgumentError.checkNotNull(page, 'page');
     ArgumentError.checkNotNull(perPage, 'perPage');
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _data = {'page': page, 'perPage': perPage};
-    _data.removeWhere((k, v) => v == null);
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'perPage': perPage
+    };
+    final _data = <String, dynamic>{};
     final _result = await _dio.request<Map<String, dynamic>>('places',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
             headers: <String, dynamic>{},
             extra: _extra,
-            contentType: 'application/x-www-form-urlencoded',
             baseUrl: baseUrl),
         data: _data);
     final value = APIListResult<Place>.fromJson(_result.data);
@@ -84,13 +85,12 @@ class _RestClient implements RestClient {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result = await _dio.request<Map<String, dynamic>>('places/{id}',
+    final _result = await _dio.request<Map<String, dynamic>>('places/$id',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
             headers: <String, dynamic>{},
             extra: _extra,
-            contentType: 'application/x-www-form-urlencoded',
             baseUrl: baseUrl),
         data: _data);
     final value = APIDetailResult<Place>.fromJson(_result.data);
